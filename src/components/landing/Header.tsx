@@ -44,7 +44,7 @@ export default function Header() {
             <i className="fa-solid fa-circle-half-stroke" aria-hidden="true" />
           </button>
           <Link
-            href="#"
+            href="/login"
             className="hidden font-medium text-slate-600 hover:text-slate-900 sm:block"
           >
             Entrar

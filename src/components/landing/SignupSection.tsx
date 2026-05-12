@@ -165,7 +165,7 @@ export default function SignupSection() {
               <p className="mt-4 text-center text-sm text-slate-600">
                 Ja tem uma conta?{" "}
                 <a
-                  href="#"
+                  href="/login"
                   className="font-bold text-purple-600 hover:text-purple-500"
                 >
                   Faca login
