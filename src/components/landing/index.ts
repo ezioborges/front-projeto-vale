@@ -1,0 +1,9 @@
+export { default as AcolhimentoSection } from "@/src/components/landing/AcolhimentoSection";
+export { default as BackgroundBlobs } from "@/src/components/landing/BackgroundBlobs";
+export { default as Footer } from "@/src/components/landing/Footer";
+export { default as Header } from "@/src/components/landing/Header";
+export { default as HeroSection } from "@/src/components/landing/HeroSection";
+export { default as LandingPage } from "@/src/components/landing/LandingPage";
+export { default as MarketRadarSection } from "@/src/components/landing/MarketRadarSection";
+export { default as SignupSection } from "@/src/components/landing/SignupSection";
+export { default as TickerBar } from "@/src/components/landing/TickerBar";
