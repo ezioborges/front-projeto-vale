@@ -1,6 +1,43 @@
+"use client";
+
+import { login } from "@/services/authService";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 export default function LoginPage() {
+  const router = useRouter();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setErrorMsg(""); // limpa os erros anteriores
+
+    try {
+      const response = await login({ email, password });
+
+      console.log("Login com sucesso", response);
+
+      router.push("/dashboard");
+    } catch (error: any) {
+      console.error("Erro no login: ", error);
+      if (error.response) {
+        setErrorMsg(
+          error.response.data.message || "E-mail ou senha incorretos",
+        );
+      } else {
+        setErrorMsg("Erro de conexão. Tente novamente mais tarde.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
       {/* Elementos de Fundo (Blobs Holograficos do Style Guide) */}
@@ -26,7 +63,13 @@ export default function LoginPage() {
         </div>
 
         {/* Formulario */}
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleLogin}>
+          {errorMsg && (
+            <div className="rounded-xl bg-red-50 p-3 text-sm text-red-600 border border-red-100">
+              <i className="fa-solid fa-circle-exclamation mr-2"></i>
+              {errorMsg}
+            </div>
+          )}
           <div>
             <label
               htmlFor="email"
@@ -43,8 +86,9 @@ export default function LoginPage() {
               </div>
               <input
                 id="email"
-                name="email"
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
                 required
                 placeholder="seu@email.com"
@@ -77,8 +121,9 @@ export default function LoginPage() {
               </div>
               <input
                 id="password"
-                name="password"
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
                 required
                 placeholder="••••••••"
@@ -92,11 +137,17 @@ export default function LoginPage() {
               type="submit"
               className="flex w-full justify-center items-center gap-2 rounded-xl bg-slate-900 px-4 py-4 text-sm font-bold text-white shadow-md transition-all hover:bg-slate-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2"
             >
-              Entrar na Plataforma
-              <i
-                className="fa-solid fa-arrow-right text-xs"
-                aria-hidden="true"
-              />
+              {isLoading ? (
+                <i className="fa-solid fa-spinner fa-spin"></i>
+              ) : (
+                <>
+                  Entrar na Plataforma
+                  <i
+                    className="fa-solid fa-arrow-right text-xs"
+                    aria-hidden="true"
+                  />
+                </>
+              )}
             </button>
           </div>
         </form>

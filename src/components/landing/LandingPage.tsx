@@ -1,11 +1,11 @@
-import AcolhimentoSection from "@/src/components/landing/AcolhimentoSection";
-import BackgroundBlobs from "@/src/components/landing/BackgroundBlobs";
-import Footer from "@/src/components/landing/Footer";
-import Header from "@/src/components/landing/Header";
-import HeroSection from "@/src/components/landing/HeroSection";
-import MarketRadarSection from "@/src/components/landing/MarketRadarSection";
-import SignupSection from "@/src/components/landing/SignupSection";
-import TickerBar from "@/src/components/landing/TickerBar";
+import AcolhimentoSection from "./AcolhimentoSection";
+import BackgroundBlobs from "./BackgroundBlobs";
+import Footer from "./Footer";
+import Header from "./Header";
+import HeroSection from "./HeroSection";
+import MarketRadarSection from "./MarketRadarSection";
+import SignupSection from "./SignupSection";
+import TickerBar from "./TickerBar";
 
 export default function LandingPage() {
   return (
