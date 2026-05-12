@@ -11,7 +11,7 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "ConectaTalento - Plataforma de Empregabilidade Inclusiva",
+  title: "Vale - Plataforma de Empregabilidade Inclusiva",
   description:
     "Conectamos profissionais a empresas que valorizam diversidade e acolhimento.",
 };
