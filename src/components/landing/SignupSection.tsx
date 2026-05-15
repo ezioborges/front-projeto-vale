@@ -1,4 +1,50 @@
+"use client";
+
+import { register } from "@/services/singupService";
+import { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+
 export default function SignupSection() {
+  const router = useRouter();
+
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  type RegisterErrorResponse = {
+    message?: string;
+  };
+
+  const handleSingup = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setErrorMsg("");
+
+    try {
+      await register({ username, email, password });
+      router.push("/auth/login");
+    } catch (error) {
+      const axiosError = error as AxiosError<RegisterErrorResponse>;
+      console.error("Erro ao registrar ", error);
+
+      if (axiosError.response) {
+        setErrorMsg(
+          axiosError.response.data?.message ||
+            "Falha ao registrar novo usuário.",
+        );
+      } else {
+        setErrorMsg("Erro de conexão. Tente novamente mais tarde.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+
+    setIsLoading(false);
+  };
+
   return (
     <section
       id="cadastro"
@@ -67,7 +113,13 @@ export default function SignupSection() {
               </button>
             </div>
 
-            <form className="space-y-5">
+            <form className="space-y-5" onSubmit={handleSingup}>
+              {errorMsg && (
+                <div className="rounded-xl bg-red-50 p-3 text-sm text-red-600 border border-red-100">
+                  <i className="fa-solid fa-circle-exclamation mr-2"></i>
+                  {errorMsg}
+                </div>
+              )}
               <div>
                 <label
                   htmlFor="username"
@@ -86,6 +138,8 @@ export default function SignupSection() {
                     type="text"
                     id="username"
                     name="username"
+                    value={username}
+                    onChange={({ target }) => setUsername(target.value)}
                     placeholder="Ex: joaosilva"
                     autoComplete="username"
                     required
@@ -112,6 +166,8 @@ export default function SignupSection() {
                     type="email"
                     id="email"
                     name="email"
+                    value={email}
+                    onChange={({ target }) => setEmail(target.value)}
                     placeholder="seu@email.com"
                     autoComplete="email"
                     required
@@ -138,6 +194,8 @@ export default function SignupSection() {
                     type="password"
                     id="password"
                     name="password"
+                    value={password}
+                    onChange={({ target }) => setPassword(target.value)}
                     placeholder="••••••••"
                     autoComplete="new-password"
                     required
@@ -154,11 +212,17 @@ export default function SignupSection() {
                   type="submit"
                   className="flex w-full justify-center rounded-xl border border-transparent bg-slate-900 px-4 py-3.5 text-sm font-bold text-white shadow-sm transition-colors hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2"
                 >
-                  Continuar para o Perfil
-                  <i
-                    className="fa-solid fa-arrow-right ml-2 mt-0.5"
-                    aria-hidden="true"
-                  />
+                  {isLoading ? (
+                    <i className="fa-solid fa-spinner fa-spin"></i>
+                  ) : (
+                    <>
+                      Continuar para o Perfil
+                      <i
+                        className="fa-solid fa-arrow-right ml-2 mt-0.5"
+                        aria-hidden="true"
+                      />
+                    </>
+                  )}
                 </button>
               </div>
 
