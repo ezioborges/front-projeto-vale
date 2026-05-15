@@ -1,17 +1,31 @@
 "use client";
 
+import type { AxiosError } from "axios";
 import { login } from "@/services/authService";
+import useAuth from "@/hooks/useAuth";
+import { resolvePostLoginRoute } from "@/utils/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { isAuthenticated, isReady, setSession, user } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
+  type LoginErrorResponse = {
+    message?: string;
+  };
+
+  useEffect(() => {
+    if (isReady && isAuthenticated && user) {
+      router.replace(resolvePostLoginRoute(user));
+    }
+  }, [isAuthenticated, isReady, router, user]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,17 +35,17 @@ export default function LoginPage() {
     try {
       const response = await login({ email, password });
 
-      console.log("Login com sucesso", response);
-
-      router.push("/dashboard");
-    } catch (error: any) {
+      setSession(response.access, response.refresh, response.user);
+      router.push(resolvePostLoginRoute(response.user));
+    } catch (error) {
+      const axiosError = error as AxiosError<LoginErrorResponse>;
       console.error("Erro no login: ", error);
-      if (error.response) {
+      if (axiosError.response) {
         setErrorMsg(
-          error.response.data.message || "E-mail ou senha incorretos",
+          axiosError.response.data?.message || "E-mail ou senha incorretos",
         );
       } else {
-        setErrorMsg("Erro de conexão. Tente novamente mais tarde.");
+        setErrorMsg("Erro de conexao. Tente novamente mais tarde.");
       }
     } finally {
       setIsLoading(false);

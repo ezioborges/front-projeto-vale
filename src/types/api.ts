@@ -6,12 +6,14 @@ export type LoginPayload = {
 };
 
 export type RegisterPayload = {
-  name: string;
+  username: string;
   email: string;
   password: string;
+  role?: User["role"];
 };
 
 export type AuthResponse = {
-  token: string;
+  access: string;
+  refresh: string;
   user: User;
 };
