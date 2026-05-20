@@ -8,7 +8,7 @@ export default async function DashboardRedirectPage() {
     cookieStore.get("vale_profile_completed")?.value === "1";
 
   if (role === "employee" && !profileCompleted) {
-    redirect("/completar-perfil");
+    redirect("/perfil");
   }
 
   if (role === "employee") {

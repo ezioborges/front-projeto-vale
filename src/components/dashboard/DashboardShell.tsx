@@ -71,7 +71,7 @@ export default function DashboardShell({
                 </p>
               </div>
               <Link
-                href="/completar-perfil"
+                href="/perfil"
                 className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-slate-800"
               >
                 Completar perfil

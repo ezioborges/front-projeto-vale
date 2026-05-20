@@ -14,7 +14,7 @@ function resolveAuthenticatedRoute(
   profileCompleted: boolean,
 ) {
   if (role === "employee" && !profileCompleted) {
-    return "/completar-perfil";
+    return "/perfil";
   }
 
   return DASHBOARD_BY_ROLE[role];
@@ -54,8 +54,10 @@ export function middleware(request: NextRequest) {
     isPrefixedPath(pathname, "/dashboard-employee") ||
     isPrefixedPath(pathname, "/dashboard-employer") ||
     isPrefixedPath(pathname, "/dashboard-admin") ||
-    isPrefixedPath(pathname, "/completar-perfil") ||
-    PROFILE_REQUIRED_PREFIXES.some((prefix) => isPrefixedPath(pathname, prefix));
+    isPrefixedPath(pathname, "/perfil") ||
+    PROFILE_REQUIRED_PREFIXES.some((prefix) =>
+      isPrefixedPath(pathname, prefix),
+    );
 
   if (!isProtectedRoute) {
     return NextResponse.next();
@@ -69,7 +71,7 @@ export function middleware(request: NextRequest) {
 
   const authenticatedHome = resolveAuthenticatedRoute(role, profileCompleted);
 
-  if (isPrefixedPath(pathname, "/completar-perfil")) {
+  if (isPrefixedPath(pathname, "/perfil")) {
     if (role !== "employee") {
       return NextResponse.redirect(new URL(authenticatedHome, request.url));
     }
@@ -90,7 +92,7 @@ export function middleware(request: NextRequest) {
     !profileCompleted &&
     PROFILE_REQUIRED_PREFIXES.some((prefix) => isPrefixedPath(pathname, prefix))
   ) {
-    return NextResponse.redirect(new URL("/completar-perfil", request.url));
+    return NextResponse.redirect(new URL("/perfil", request.url));
   }
 
   return NextResponse.next();
@@ -103,7 +105,7 @@ export const config = {
     "/dashboard-employee/:path*",
     "/dashboard-employer/:path*",
     "/dashboard-admin/:path*",
-    "/completar-perfil/:path*",
+    "/perfil/:path*",
     "/vagas/:path*",
     "/candidaturas/:path*",
   ],

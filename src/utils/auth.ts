@@ -12,7 +12,7 @@ export function resolveDashboardRoute(role: UserRole) {
 
 export function resolvePostLoginRoute(user: User) {
   if (user.role === "employee" && !user.profile_completed) {
-    return "/completar-perfil";
+    return "/perfil";
   }
 
   return resolveDashboardRoute(user.role);
